@@ -8,7 +8,6 @@ public class PlayerMovement : MonoBehaviour
     public float gravity = -9.81f;
     private CharacterController controller;
     private Vector3 velocity;
-    //Vector3 vel = Vector3.zero;
     Vector3 moveDirection = Vector3.zero;
     private int jumpCount; 
     private const int maxJumpCount = 2; 
@@ -25,10 +24,6 @@ public class PlayerMovement : MonoBehaviour
         moveDirection = new Vector3(horizontalMove, 0, verticalMove);
         controller.Move(moveDirection * speed * Time.unscaledDeltaTime);
    
-        //vel.y = -9.8f * Time.unscaledDeltaTime;
-        //controller.Move(vel * Time.unscaledDeltaTime);
-        
-
         if (moveDirection != Vector3.zero)
         {
             Quaternion toRotate = Quaternion.LookRotation(moveDirection, Vector3.up);
@@ -55,10 +50,6 @@ public class PlayerMovement : MonoBehaviour
         }
 
         velocity.y += gravity * Time.unscaledDeltaTime;
-
-
-        // Apply vertical movement
-
         controller.Move(velocity * Time.unscaledDeltaTime);
     }
 
