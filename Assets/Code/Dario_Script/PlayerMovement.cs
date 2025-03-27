@@ -5,11 +5,14 @@ public class PlayerMovement : MonoBehaviour
     public float speed;
     public float rotationSpeed;
     public float jumpSpeed;
-    private float ySpeed;
+    public float gravity = -9.81f;
     private CharacterController controller;
-    Vector3 vel = Vector3.zero;
+    private Vector3 velocity;
+    //Vector3 vel = Vector3.zero;
     Vector3 moveDirection = Vector3.zero;
-    
+    private int jumpCount; 
+    private const int maxJumpCount = 2; 
+
     void Start()
     {
         controller = GetComponent<CharacterController>();
@@ -21,21 +24,9 @@ public class PlayerMovement : MonoBehaviour
         float verticalMove = Input.GetAxis("Vertical");
         moveDirection = new Vector3(horizontalMove, 0, verticalMove);
         controller.Move(moveDirection * speed * Time.unscaledDeltaTime);
-        //    Vector3 moveDirection = new Vector3(horizontalMove, transform.position.y, verticalMove);
-        //    moveDirection.Normalize();
-        //    float magnitude = moveDirection.magnitude;
-        //    magnitude = Mathf.Clamp01(magnitude);
-        //    //transform.Translate(moveDirection * speed * Time.unscaledDeltaTime, Space.World);
-
-        //    ySpeed += Physics.gravity.y * Time.unscaledDeltaTime;
-        //    if (Input.GetButtonDown("Jump"))
-        //    {
-        //        ySpeed = -0.5f;
-        //    }
-
-
-        vel.y = -9.8f * Time.unscaledDeltaTime;
-        controller.Move(vel * Time.unscaledDeltaTime);
+   
+        //vel.y = -9.8f * Time.unscaledDeltaTime;
+        //controller.Move(vel * Time.unscaledDeltaTime);
         
 
         if (moveDirection != Vector3.zero)
@@ -44,6 +35,38 @@ public class PlayerMovement : MonoBehaviour
             transform.rotation = Quaternion.RotateTowards(transform.rotation, toRotate, rotationSpeed * Time.deltaTime);
         }
 
-        
+        if (controller.isGrounded)
+        {
+            print("CharacterController is grounded");
+            jumpCount = 0;
+            velocity.y = 0;
+            if (Input.GetButtonDown("Jump")) 
+            {
+                Jump();
+            }
+        }
+
+        else
+        {
+            if (Input.GetButtonDown("Jump") && jumpCount < maxJumpCount)
+            {
+               Jump();
+            }
+        }
+
+        velocity.y += gravity * Time.unscaledDeltaTime;
+
+
+        // Apply vertical movement
+
+        controller.Move(velocity * Time.unscaledDeltaTime);
+    }
+
+    private void Jump()
+
+    {
+        velocity.y = jumpSpeed;
+        jumpCount++;
+        Debug.Log($"Jump executed. Current jump count: {jumpCount}");
     }
 }
