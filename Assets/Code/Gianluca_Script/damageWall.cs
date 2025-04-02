@@ -6,6 +6,7 @@ public class damageWall : MonoBehaviour
     [SerializeField] private HealthSystem _HS;
     [SerializeField] private trackPlayer _TP;
     [SerializeField] private Transform _Player;
+    [SerializeField] private CharacterController _PlayerCC;
 
 
     [Header("Wall Data")]
@@ -16,9 +17,10 @@ public class damageWall : MonoBehaviour
         _HS = GameObject.Find("Player").GetComponent<HealthSystem>();
         _TP = GameObject.Find("Player").GetComponent<trackPlayer>();
         _Player = GameObject.Find("Player").GetComponent<Transform>();
+        _PlayerCC = GameObject.Find("Player").GetComponent<CharacterController>();
     }
 
-    public void OnTriggerEnter(Collider other)
+    public void OnTriggerStay(Collider other)
     {
         if (other.CompareTag("Player"))
         {
@@ -27,6 +29,7 @@ public class damageWall : MonoBehaviour
             {
                 _Player.position = _TP.getGPos();
                 Debug.Log("FAI BENE ");
+                Debug.Log("" + _TP.getGPos());
             }
         }
 

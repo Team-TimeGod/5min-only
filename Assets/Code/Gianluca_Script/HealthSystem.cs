@@ -9,9 +9,9 @@ public class HealthSystem : MonoBehaviour
     [Header("Tipo di character")]
     [SerializeField] private CharacterType _characterType;
 
-    [Header("Main Camera")]
+    /*[Header("Main Camera")]
     [SerializeField] private Camera _mainCamera;
-
+    */
     [Header("Script Interagibili")]
     [SerializeField] private showCanvas _SC;
 
@@ -29,7 +29,7 @@ public class HealthSystem : MonoBehaviour
         CurrentHealth = MaxHealth; //setto la currentHealth uguale a MaxHealth
         if (_characterType == CharacterType.Player) //se è il player
         {
-            _mainCamera = GetComponentInChildren<Camera>(); //trova la camera associata
+            //_mainCamera = GetComponentInChildren<Camera>(); //trova la camera associata
             _SC = GameObject.Find("Manager").GetComponent<showCanvas>();
             
         }
@@ -51,7 +51,7 @@ public class HealthSystem : MonoBehaviour
         {
             if (_characterType == CharacterType.Player) //Se è il player
             {
-                _mainCamera.transform.SetParent(null); //Stacca la camera dal player, altrimenti viene distrutta dalla riga di codice successiva
+                //_mainCamera.transform.SetParent(null); //Stacca la camera dal player, altrimenti viene distrutta dalla riga di codice successiva
                 _SC.show(); //Mostro il menu di gameover
             }
             Destroy(this.gameObject); //Distruggi questo gameObject

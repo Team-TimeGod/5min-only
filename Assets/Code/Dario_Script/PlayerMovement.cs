@@ -9,24 +9,40 @@ public class PlayerMovement : MonoBehaviour
     private CharacterController controller;
     private Vector3 velocity;
     Vector3 moveDirection = Vector3.zero;
-    private int jumpCount; 
-    private const int maxJumpCount = 2; 
+    private int jumpCount;
+    private const int maxJumpCount = 2;
+
+    [Header("Camera Ref.")]
+    [SerializeField] private Transform _mainCamera;
 
     void Start()
     {
         controller = GetComponent<CharacterController>();
+        _mainCamera = GameObject.Find("Main Camera").GetComponent<Transform>();
     }
 
     void Update()
     {
+        //CANCRO CODE >=.=<
         float horizontalMove = Input.GetAxis("Horizontal");
         float verticalMove = Input.GetAxis("Vertical");
-        moveDirection = new Vector3(horizontalMove, 0, verticalMove);
+        Vector3 verticalDirection = verticalMove * _mainCamera.forward;
+        Vector3 horizontalDirection = horizontalMove * _mainCamera.right;
+        horizontalDirection = new Vector3(horizontalDirection.x, 0, horizontalDirection.z);
+        verticalDirection = new Vector3(verticalDirection.x, 0, verticalDirection.z);
+        Vector3 verticalRotation = verticalMove * _mainCamera.right*-1;
+        Vector3 horizontalRotation = horizontalMove * _mainCamera.forward;
+        horizontalRotation = new Vector3(horizontalRotation.x, 0, horizontalRotation.z);
+        verticalRotation = new Vector3(verticalRotation.x, 0, verticalRotation.z);
+        Vector3 rotation = verticalRotation + horizontalRotation;
+
+        //moveDirection = new Vector3(horizontalMove, 0, verticalMove);
+        moveDirection = horizontalDirection + verticalDirection;
         controller.Move(moveDirection * speed * Time.unscaledDeltaTime);
    
         if (moveDirection != Vector3.zero)
         {
-            Quaternion toRotate = Quaternion.LookRotation(moveDirection, Vector3.up);
+            Quaternion toRotate = Quaternion.LookRotation(rotation, Vector3.up);
             transform.rotation = Quaternion.RotateTowards(transform.rotation, toRotate, rotationSpeed * Time.unscaledDeltaTime);
         }
 
