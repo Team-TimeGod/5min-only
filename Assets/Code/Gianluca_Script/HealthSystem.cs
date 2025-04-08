@@ -5,6 +5,9 @@ public class HealthSystem : MonoBehaviour
     [Header("Variabili per la vita")]
     [SerializeField] private float MaxHealth; //player = 300(5 min)
     [SerializeField] private float CurrentHealth; //player = secondi - nemico = pf
+    [SerializeField] private bool hittable = true;
+    [SerializeField] private float cooldown;
+    [SerializeField] private float hitTimer = 0f;
 
     [Header("Tipo di character")]
     [SerializeField] private CharacterType _characterType;
@@ -17,6 +20,7 @@ public class HealthSystem : MonoBehaviour
 
     [Header("DEBUG")]
     public bool DEBUGMODE;
+
 
     enum CharacterType : byte
     {
@@ -42,6 +46,17 @@ public class HealthSystem : MonoBehaviour
 
     public void Update()
     {
+        if (!hittable)
+        {
+            hitTimer += Time.unscaledDeltaTime;
+            if (hitTimer > cooldown)
+            {
+                hittable = true;
+                hitTimer = 0f;
+            }
+        }
+        if (Time_Controller.Instance != null && Time_Controller.Instance.IsTimeStopped) return;
+
         if (_characterType == CharacterType.Player) //Se il tipo selezionato è player
         {
             CurrentHealth -= Time.deltaTime; //rimuove 1 unità ogni secondo di gioco 
@@ -74,7 +89,10 @@ public class HealthSystem : MonoBehaviour
 
     public void TakeDamage(float _damage)
     {
-        CurrentHealth -= _damage; //Sottrai _damage alla vita
+        if (!hittable) return;
+        CurrentHealth -= _damage*Time.timeScale; //Sottrai _damage alla vita
+        hittable = false;
+        hitTimer = 0f;
     }
 
     public void RestoreLife(float _lifeToAdd)

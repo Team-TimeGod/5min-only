@@ -23,8 +23,10 @@ public class PlayerMovement : MonoBehaviour
     void Update()
     {
         //CANCRO CODE >=.=<
-        float horizontalMove = Input.GetAxis("Horizontal");
-        float verticalMove = Input.GetAxis("Vertical");
+        //float horizontalMove = Input.GetAxis("Horizontal");
+        //float verticalMove = Input.GetAxis("Vertical");
+        float horizontalMove = Input.GetAxisRaw("Horizontal");
+        float verticalMove = Input.GetAxisRaw("Vertical");
         Vector3 verticalDirection = verticalMove * _mainCamera.forward;
         Vector3 horizontalDirection = horizontalMove * _mainCamera.right;
         horizontalDirection = new Vector3(horizontalDirection.x, 0, horizontalDirection.z);
