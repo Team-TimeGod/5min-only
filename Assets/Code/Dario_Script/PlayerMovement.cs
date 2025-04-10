@@ -5,19 +5,24 @@ public class PlayerMovement : MonoBehaviour
     public float speed;
     public float rotationSpeed;
     public float jumpSpeed;
+    public float superJumpSpeed;
     public float gravity = -9.81f;
+    public float midAirScale;
+
     private CharacterController controller;
     private Vector3 velocity;
     Vector3 moveDirection = Vector3.zero;
     private int jumpCount;
     private const int maxJumpCount = 2;
 
-    [Header("Camera Ref.")]
+    [Header("Reference")]
     [SerializeField] private Transform _mainCamera;
+    [SerializeField] private InventoryMananger _IM;
 
     void Start()
     {
         controller = GetComponent<CharacterController>();
+        _IM = GameObject.Find("Manager").GetComponent<InventoryMananger>();
     }
 
     void Update()
@@ -38,7 +43,7 @@ public class PlayerMovement : MonoBehaviour
         Vector3 rotation = verticalRotation + horizontalRotation;
 
         //moveDirection = new Vector3(horizontalMove, 0, verticalMove);
-        moveDirection = horizontalDirection + verticalDirection;
+        
         controller.Move(moveDirection * speed * Time.unscaledDeltaTime);
    
         if (moveDirection != Vector3.zero)
@@ -50,6 +55,7 @@ public class PlayerMovement : MonoBehaviour
         if (controller.isGrounded)
         {
             print("CharacterController is grounded");
+            moveDirection = horizontalDirection + verticalDirection;
             jumpCount = 0;
             velocity.y = 0;
             if (Input.GetButtonDown("Jump")) 
@@ -60,6 +66,7 @@ public class PlayerMovement : MonoBehaviour
 
         else
         {
+            moveDirection = (horizontalDirection + verticalDirection)*midAirScale;
             if (Input.GetButtonDown("Jump") && jumpCount < maxJumpCount)
             {
                Jump();
@@ -73,8 +80,17 @@ public class PlayerMovement : MonoBehaviour
     private void Jump()
 
     {
-        velocity.y = jumpSpeed;
-        jumpCount++;
+        if (_IM.getDoubleJump())
+        {
+            velocity.y = superJumpSpeed;
+            jumpCount = maxJumpCount;
+            _IM.setDoubleJump(false);
+        }
+        else
+        {
+            velocity.y = jumpSpeed;
+            jumpCount++;
+        }
         Debug.Log($"Jump executed. Current jump count: {jumpCount}");
     }
 }
