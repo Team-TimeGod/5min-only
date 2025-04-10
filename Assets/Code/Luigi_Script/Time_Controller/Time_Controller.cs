@@ -9,6 +9,8 @@ public class Time_Controller : MonoBehaviour
     [SerializeField] private float timeSlowDuration = 5f;  // Duration to slow down the time
     [SerializeField] private float timeFastDuration = 5f;  // Duration to speed up the time
     [SerializeField] private float cooldownDuration = 10f;  // Cooldown for all actions
+    [SerializeField] private float _FFMult;  // Time x mult
+    [SerializeField] private float _SlowMult;  // Slow Mult
 
     private bool isOnCooldown = false;
     private float timeStopTimer = 0f;
@@ -41,13 +43,13 @@ public class Time_Controller : MonoBehaviour
         // Check if the player is trying to slow down the time
         if (Input.GetKeyDown(KeyCode.R) && !isOnCooldown)
         {
-            SetTimeSpeed(0.5f, timeSlowDuration);  // Slow down the time
+            SetTimeSpeed(_SlowMult, timeSlowDuration);  // Slow down the time
         }
 
         // Check if the player is trying to speed up the time
         if (Input.GetKeyDown(KeyCode.F) && !isOnCooldown)
         {
-            SetTimeSpeed(2f, timeFastDuration);  // Speed up the time
+            SetTimeSpeed(_FFMult, timeFastDuration);  // Speed up the time
         }
 
         // Manage the timer for stopping time
@@ -106,14 +108,8 @@ public class Time_Controller : MonoBehaviour
     private void SetTimeSpeed(float scale, float duration)
     {
         Time.timeScale = scale;  // Set the time speed (0.5 to slow it down, 2 to speed it up)
-        if (scale == 0.5f)
-        {
-            timeSlowTimer = duration;  // Slow down the time for the specified duration
-        }
-        else if (scale == 2f)
-        {
-            timeFastTimer = duration;  // Speed up the time for the specified duration
-        }
+        timeSlowTimer = duration;  // Slow down the time for the specified duration
+       
 
         Debug.Log($"Time speed set to {scale}x for {duration} seconds.");
     }
