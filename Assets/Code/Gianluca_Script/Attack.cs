@@ -64,6 +64,7 @@ public class Attack : MonoBehaviour
             _isAttacking = true;
             Debug.LogWarning("ATTACK");
         }
+
         if (_AC.GetCurrentAnimatorStateInfo(0).IsName("Attack"))
         {
             StartCoroutine("Wait");
