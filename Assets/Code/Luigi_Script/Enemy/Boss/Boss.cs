@@ -1,6 +1,5 @@
 using UnityEngine;
 using System.Collections;
-using UnityEngine.AI;
 using System.Collections.Generic;
 
 public class Boss : MonoBehaviour
@@ -14,6 +13,8 @@ public class Boss : MonoBehaviour
     [SerializeField] private GameObject areaAttackPrefab;
     [SerializeField] private GameObject projectilePreFab;
     [SerializeField] private Transform firePoint;
+    [SerializeField] private Transform target;
+    [SerializeField] private float projectileSpeed = 10f;
 
     [Header("Health System")]
     [SerializeField] private HealthSystem healthSystem;
@@ -38,23 +39,22 @@ public class Boss : MonoBehaviour
         {
             if (!isAttacking)
             {
-                Vector3 target = pathpoints[currentPointIndex].position;
+                Vector3 targetPos = pathpoints[currentPointIndex].position;
 
-                while (Vector3.Distance(transform.position, target) > 0.2f)
+                while (Vector3.Distance(transform.position, targetPos) > 0.2f)
                 {
-                    transform.position = Vector3.MoveTowards(transform.position, target, movespeed * Time.deltaTime);
-                    transform.LookAt(target);
+                    transform.position = Vector3.MoveTowards(transform.position, targetPos, movespeed * Time.deltaTime);
+                    transform.LookAt(targetPos);
                     yield return null;
                 }
 
-                //Stop and attack
                 yield return new WaitForSeconds(0.5f);
                 StartCoroutine(AttackRoutine());
 
                 yield return new WaitForSecondsRealtime(waitTimeAtPoint);
-
                 currentPointIndex = (currentPointIndex + 1) % pathpoints.Length;
             }
+            yield return null;
         }
     }
 
@@ -62,17 +62,14 @@ public class Boss : MonoBehaviour
     {
         isAttacking = true;
 
-        //Choose one of the attack
         if (attackQueue.Count == 0)
             RebuildAttackQueue();
 
         string attack = attackQueue.Dequeue();
 
-        if (attack == "Projectile")
+        if (attack == "Projectile" && target != null)
         {
-            GameObject projectile = Instantiate(projectilePreFab, firePoint.position, firePoint.rotation);
-            Rigidbody _rigidbody = projectile.GetComponent<Rigidbody>();
-            _rigidbody.linearVelocity = transform.forward * Time.deltaTime * 10f;
+            ShootProjectile();
         }
         else if (attack == "Area")
         {
@@ -82,6 +79,21 @@ public class Boss : MonoBehaviour
 
         yield return new WaitForSecondsRealtime(1.5f);
         isAttacking = false;
+    }
+
+    void ShootProjectile()
+    {
+        GameObject projectile = Instantiate(projectilePreFab, firePoint.position, firePoint.rotation);
+
+        Vector3 direction = (target.position - firePoint.position).normalized;
+        Rigidbody rb = projectile.GetComponent<Rigidbody>();
+
+        if (rb != null)
+        {
+            rb.linearVelocity = direction * projectileSpeed;
+        }
+
+        Destroy(projectile, 5f);
     }
 
     void RebuildAttackQueue()
