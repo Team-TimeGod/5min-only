@@ -54,7 +54,7 @@ public class PlayerMovement : MonoBehaviour
 
         if (controller.isGrounded)
         {
-            print("CharacterController is grounded");
+            //print("CharacterController is grounded");
             moveDirection = horizontalDirection + verticalDirection;
             jumpCount = 0;
             velocity.y = 0;
@@ -91,6 +91,6 @@ public class PlayerMovement : MonoBehaviour
             velocity.y = jumpSpeed;
             jumpCount++;
         }
-        Debug.Log($"Jump executed. Current jump count: {jumpCount}");
+        //Debug.Log($"Jump executed. Current jump count: {jumpCount}");
     }
 }
