@@ -47,14 +47,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ae9af9c2a5cade546816cfc3c4e12dcb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  delayBeforeActivation: 1.5
-  damage: 20
-  activeTime: 1
-  targetLayer:
+  cubi: []
+  danno: 10
+  raggioAttivazione: 5
+  layerBersaglio:
     serializedVersion: 2
     m_Bits: 128
-  warningEffect: {fileID: 5543263430548850071, guid: 9aa595c019d55d243b412bc7702bff59, type: 3}
-  explosionEffect: {fileID: 4033980671109149413, guid: fa5dcf004f0bd674aa677071dfc94deb, type: 3}
 --- !u!33 &2096905855507869417
 MeshFilter:
   m_ObjectHideFlags: 0

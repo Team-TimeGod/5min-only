@@ -19,9 +19,6 @@ public class Boss : MonoBehaviour
     [Header("Health System")]
     [SerializeField] private HealthSystem healthSystem;
 
-    [Header("Door To Open")]
-    [SerializeField] private Boss_Door doorToOpen;
-
     private int currentPointIndex = 0;
     private bool isAttacking = false;
 
@@ -79,16 +76,13 @@ public class Boss : MonoBehaviour
             Vector3 spawnPosition = target.position;
             GameObject area = Instantiate(areaAttackPrefab, spawnPosition, Quaternion.identity);
 
-            Area_Attack areaScript = area.GetComponent<Area_Attack>();
-            if (areaScript != null)
-            {
-                areaScript.Initialize(target);
-            }
+            StartCoroutine(HandleAreaAttack(area, 2f)); // Delay prima del danno
         }
 
         yield return new WaitForSecondsRealtime(1.5f);
         isAttacking = false;
     }
+
 
     void ShootProjectile()
     {
@@ -105,20 +99,39 @@ public class Boss : MonoBehaviour
         Destroy(projectile, 5f);
     }
 
+    IEnumerator HandleAreaAttack(GameObject area, float delay)
+    {
+        yield return new WaitForSeconds(delay);
+
+        float raggioAttivazione = 5f;
+        int danno = 10;
+        LayerMask layerBersaglio = LayerMask.GetMask("Player"); // Assicurati che il player sia in questo layer
+
+        Collider[] bersagli = Physics.OverlapSphere(area.transform.position, raggioAttivazione, layerBersaglio);
+
+        foreach (Collider bersaglio in bersagli)
+        {
+            HealthSystem salute = bersaglio.GetComponent<HealthSystem>();
+            if (salute != null)
+            {
+                salute.TakeDamage(danno);
+                Debug.Log("Attacco Area ha inflitto " + danno + " danni a " + bersaglio.name);
+            }
+        }
+
+        Destroy(area, 1f); // Effetto visivo ancora un attimo, poi scompare
+    }
+
     private bool isDead = false;
+
+    public bool IsDead => isDead;
 
     private void Update()
     {
         if (!isDead && healthSystem.getLife() <= 0f)
         {
             isDead = true;
-
             StopAllCoroutines();
-
-            // Apri la porta
-            if (doorToOpen != null)
-                doorToOpen.OpenDoor();
-
         }
     }
 

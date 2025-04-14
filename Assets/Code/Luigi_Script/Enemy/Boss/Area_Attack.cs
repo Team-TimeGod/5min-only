@@ -1,60 +1,45 @@
 using UnityEngine;
-using System.Collections;
+using static UnityEngine.Rendering.DebugUI;
+using UnityEngine.ProBuilder.Shapes;
+
 
 public class Area_Attack : MonoBehaviour
 {
-    [Header("Attack Settings")]
-    [SerializeField] private float delayBeforeActivation = 1.5f;
-    [SerializeField] private float damage = 20f;
-    [SerializeField] private float activeTime = 1f;
-    [SerializeField] private LayerMask targetLayer;
+    public GameObject[] cubi; // Array di cubi
+    public int danno = 10;  // Quantità di danno che infliggono
+    public float raggioAttivazione = 5f; // Raggio entro il quale il cubo si attiva
+    public LayerMask layerBersaglio; // Layer del bersaglio (es. giocatore)
 
-    [Header("VFX")]
-    [SerializeField] private GameObject warningEffect;
-    [SerializeField] private GameObject explosionEffect;
 
-    private bool isActive = false;
-    private Transform target;
-
-    public void Initialize(Transform playerTarget)
+    void Update()
     {
-        target = playerTarget;
-        StartCoroutine(ActivateTriggerAfterDelay());
-    }
-
-    private IEnumerator ActivateTriggerAfterDelay()
-    {
-        // Warning visual
-        if (warningEffect != null)
-            Instantiate(warningEffect, transform.position, Quaternion.identity, transform);
-
-        // Aspetta prima di attivare l'area
-        yield return new WaitForSeconds(delayBeforeActivation);
-        isActive = true;
-
-        // Effetto visivo d'attivazione
-        if (explosionEffect != null)
+        foreach (GameObject cubo in cubi)
         {
-            GameObject fx = Instantiate(explosionEffect, transform.position, Quaternion.identity);
-            Destroy(fx, 2f);
-        }
+            // Calcola la distanza tra il cubo e questo oggetto
+            float distanza = Vector3.Distance(transform.position, cubo.transform.position);
 
-        // L'area rimane attiva per un po' prima di sparire
-        yield return new WaitForSeconds(activeTime);
-        Destroy(gameObject);
-    }
 
-    private void OnTriggerEnter(Collider other)
-    {
-        if (!isActive) return;
-
-        // Verifica se il collider è il target (player)
-        if (((1 << other.gameObject.layer) & targetLayer) != 0 && other.transform == target)
-        {
-            HealthSystem health = other.GetComponent<HealthSystem>();
-            if (health != null)
+            // Se il cubo è entro il raggio di attivazione
+            if (distanza <= raggioAttivazione)
             {
-                health.TakeDamage(damage);
+                // Controlla se c'è un bersaglio nel raggio
+                Collider[] bersagli = Physics.OverlapSphere(cubo.transform.position, raggioAttivazione, layerBersaglio);
+
+
+                if (bersagli.Length > 0)
+                {
+                    // Applica il danno a tutti i bersagli trovati
+                    foreach (Collider bersaglio in bersagli)
+                    {
+                        // Ottieni il componente "Salute" del bersaglio (se presente)
+                        HealthSystem salute = bersaglio.GetComponent<HealthSystem>();
+                        if (salute != null)
+                        {
+                            salute.TakeDamage(danno);
+                            Debug.Log("Cubo ha inflitto " + danno + " danni a " + bersaglio.name);
+                        }
+                    }
+                }
             }
         }
     }
