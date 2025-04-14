@@ -19,6 +19,9 @@ public class Boss : MonoBehaviour
     [Header("Health System")]
     [SerializeField] private HealthSystem healthSystem;
 
+    [Header("Door To Open")]
+    [SerializeField] private Boss_Door doorToOpen;
+
     private int currentPointIndex = 0;
     private bool isAttacking = false;
 
@@ -71,10 +74,16 @@ public class Boss : MonoBehaviour
         {
             ShootProjectile();
         }
-        else if (attack == "Area")
+        else if (attack == "Area" && target != null)
         {
-            GameObject area = Instantiate(areaAttackPrefab, transform.position, Quaternion.identity);
-            Destroy(area, 2f);
+            Vector3 spawnPosition = target.position;
+            GameObject area = Instantiate(areaAttackPrefab, spawnPosition, Quaternion.identity);
+
+            Area_Attack areaScript = area.GetComponent<Area_Attack>();
+            if (areaScript != null)
+            {
+                areaScript.Initialize(target);
+            }
         }
 
         yield return new WaitForSecondsRealtime(1.5f);
@@ -94,6 +103,23 @@ public class Boss : MonoBehaviour
         }
 
         Destroy(projectile, 5f);
+    }
+
+    private bool isDead = false;
+
+    private void Update()
+    {
+        if (!isDead && healthSystem.getLife() <= 0f)
+        {
+            isDead = true;
+
+            StopAllCoroutines();
+
+            // Apri la porta
+            if (doorToOpen != null)
+                doorToOpen.OpenDoor();
+
+        }
     }
 
     void RebuildAttackQueue()
