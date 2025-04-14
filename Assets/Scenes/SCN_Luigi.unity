@@ -1565,6 +1565,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1106669111}
   - component: {fileID: 1106669110}
+  - component: {fileID: 1106669112}
   m_Layer: 0
   m_Name: Manager
   m_TagString: Untagged
@@ -1601,6 +1602,23 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1106669112
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1106669109}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: be18ebdad569e844393e23905919d26b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Keys: 
+  _doubleJump: 0
+  _duration: 0
+  _TMPduration: 0
+  _HS: {fileID: 0}
 --- !u!1 &1187000851
 GameObject:
   m_ObjectHideFlags: 0
@@ -1819,7 +1837,7 @@ Transform:
   m_GameObject: {fileID: 1231510832}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 1, z: -20}
+  m_LocalPosition: {x: 0, y: 1, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -1882,9 +1900,9 @@ MonoBehaviour:
   jumpSpeed: 5
   superJumpSpeed: 0
   gravity: -9.81
-  midAirScale: 0
+  midAirScale: 1
   _mainCamera: {fileID: 330585546}
-  _IM: {fileID: 0}
+  _IM: {fileID: 1106669112}
 --- !u!143 &1231510839
 CharacterController:
   m_ObjectHideFlags: 0
@@ -3018,6 +3036,10 @@ PrefabInstance:
     - target: {fileID: 8574301708618511710, guid: 217f3931a2457964997a3560cb3b8fb3, type: 3}
       propertyPath: m_Name
       value: Enemy_Test
+      objectReference: {fileID: 0}
+    - target: {fileID: 8574301708618511710, guid: 217f3931a2457964997a3560cb3b8fb3, type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

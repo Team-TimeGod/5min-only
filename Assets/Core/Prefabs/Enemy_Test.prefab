@@ -134,7 +134,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 19ad391aa6bdca340b829e7e4b28b63a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  <PatrolPoints>k__BackingField: []
+  <PatrolPoints>k__BackingField:
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
   <PatrolState>k__BackingField:
     playerSightRadius: 20
   <PlayerTransform>k__BackingField: {fileID: 0}
