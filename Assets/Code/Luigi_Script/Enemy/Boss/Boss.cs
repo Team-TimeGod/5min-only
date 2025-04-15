@@ -10,7 +10,7 @@ public class Boss : MonoBehaviour
     [SerializeField] private float movespeed = 3f;
 
     [Header("Attack Options")]
-    [SerializeField] private GameObject areaAttackPrefab;
+    [SerializeField] private Area_Attack areaAttackController;
     [SerializeField] private GameObject projectilePreFab;
     [SerializeField] private Transform firePoint;
     [SerializeField] private Transform target;
@@ -71,12 +71,9 @@ public class Boss : MonoBehaviour
         {
             ShootProjectile();
         }
-        else if (attack == "Area" && target != null)
+        else if (attack == "Area")
         {
-            Vector3 spawnPosition = target.position;
-            GameObject area = Instantiate(areaAttackPrefab, spawnPosition, Quaternion.identity);
-
-            StartCoroutine(HandleAreaAttack(area, 2f)); // Delay prima del danno
+            areaAttackController.TriggerAttack(); // Chiama l'attacco sui cubi
         }
 
         yield return new WaitForSecondsRealtime(1.5f);
@@ -97,29 +94,6 @@ public class Boss : MonoBehaviour
         }
 
         Destroy(projectile, 5f);
-    }
-
-    IEnumerator HandleAreaAttack(GameObject area, float delay)
-    {
-        yield return new WaitForSeconds(delay);
-
-        float raggioAttivazione = 5f;
-        int danno = 10;
-        LayerMask layerBersaglio = LayerMask.GetMask("Player"); // Assicurati che il player sia in questo layer
-
-        Collider[] bersagli = Physics.OverlapSphere(area.transform.position, raggioAttivazione, layerBersaglio);
-
-        foreach (Collider bersaglio in bersagli)
-        {
-            HealthSystem salute = bersaglio.GetComponent<HealthSystem>();
-            if (salute != null)
-            {
-                salute.TakeDamage(danno);
-                Debug.Log("Attacco Area ha inflitto " + danno + " danni a " + bersaglio.name);
-            }
-        }
-
-        Destroy(area, 1f); // Effetto visivo ancora un attimo, poi scompare
     }
 
     private bool isDead = false;
