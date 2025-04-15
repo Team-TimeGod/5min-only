@@ -1,67 +1,46 @@
-Ôªøusing System.Collections;
 using UnityEngine;
+using static UnityEngine.Rendering.DebugUI;
+using UnityEngine.ProBuilder.Shapes;
+
 
 public class Area_Attack : MonoBehaviour
 {
-    [Header("Area Attack Options")]
-    [SerializeField] private GameObject cubePrefab;
-    [SerializeField] private Transform areaSpawnPoint;
-    [SerializeField] private int rows = 5;
-    [SerializeField] private int cols = 5;
-    [SerializeField] private float spacing = 2f;
-    [SerializeField] private float activationInterval = 1.5f;
-    [Header("Cube Options")]
-    [SerializeField] private HealthSystem bossHealth;
-    [SerializeField] private int minCubesToActivate = 3;
-    [SerializeField] private int maxCubesToActivate = 10;
+    public GameObject[] cubi; // Array di cubi
+    public int danno = 10;  // Quantit‡ di danno che infliggono
+    public float raggioAttivazione = 5f; // Raggio entro il quale il cubo si attiva
+    public LayerMask layerBersaglio; // Layer del bersaglio (es. giocatore)
 
 
-    private Damage_Cube[,] cubes;
-
-    void Start()
+    void Update()
     {
-        cubes = new Damage_Cube[rows, cols];
-
-        Vector3 startPos = areaSpawnPoint.position;
-
-        for (int x = 0; x < rows; x++)
+        foreach (GameObject cubo in cubi)
         {
-            for (int y = 0; y < cols; y++)
+            // Calcola la distanza tra il cubo e questo oggetto
+            float distanza = Vector3.Distance(transform.position, cubo.transform.position);
+
+
+            // Se il cubo Ë entro il raggio di attivazione
+            if (distanza <= raggioAttivazione)
             {
-                Vector3 spawnPos = startPos + new Vector3(x * spacing, 0, y * spacing);
-                GameObject cube = Instantiate(cubePrefab, spawnPos, Quaternion.identity, areaSpawnPoint);
-                cubes[x, y] = cube.GetComponent<Damage_Cube>();
+                // Controlla se c'Ë un bersaglio nel raggio
+                Collider[] bersagli = Physics.OverlapSphere(cubo.transform.position, raggioAttivazione, layerBersaglio);
+
+
+                if (bersagli.Length > 0)
+                {
+                    // Applica il danno a tutti i bersagli trovati
+                    foreach (Collider bersaglio in bersagli)
+                    {
+                        // Ottieni il componente "Salute" del bersaglio (se presente)
+                        HealthSystem salute = bersaglio.GetComponent<HealthSystem>();
+                        if (salute != null)
+                        {
+                            salute.TakeDamage(danno);
+                            Debug.Log("Cubo ha inflitto " + danno + " danni a " + bersaglio.name);
+                        }
+                    }
+                }
             }
         }
-    }
-
-    public void TriggerAttack()
-    {
-        StartCoroutine(ActivateRandomCubes());
-    }
-
-    IEnumerator ActivateRandomCubes()
-    {
-        foreach (var cube in cubes)
-            cube.Deactivate();
-
-        yield return new WaitForSeconds(0.2f);
-
-        // Calcolo dinamico in base alla salute
-        float current = bossHealth.getLife();
-        float max = bossHealth.GetType().GetField("MaxHealth", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance).GetValue(bossHealth) is float val ? val : 100f;
-        float healthRatio = Mathf.Clamp01(current / max);
-
-        // Meno vita = pi√π cubi
-        int numToActivate = Mathf.RoundToInt(Mathf.Lerp(maxCubesToActivate, minCubesToActivate, healthRatio));
-
-        for (int i = 0; i < numToActivate; i++)
-        {
-            int x = Random.Range(0, rows);
-            int y = Random.Range(0, cols);
-            cubes[x, y].ActivateWithWarning();
-        }
-
-        yield return new WaitForSeconds(activationInterval);
     }
 }
