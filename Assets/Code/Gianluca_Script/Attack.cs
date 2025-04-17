@@ -33,15 +33,29 @@ public class Attack : MonoBehaviour
     {
         if (_isAttacking)
         {
-            if (other.CompareTag ("Enemy"))
+            // Gestione del danno ai nemici
+            if (other.CompareTag("Enemy"))
             {
                 _targetHS = other.GetComponent<HealthSystem>();
             }
 
             if (_targetHS != null)
             {
-                _targetHS.TakeDamage(_damage * Time.timeScale); //In base al moltiplicatore del tempo arreco +- danno
-                _isAttacking = false; // Replace with flase in animation
+                _targetHS.TakeDamage(_damage * Time.timeScale); // In base al moltiplicatore del tempo arreco +- danno
+                _isAttacking = false; // Replace with false in animation
+            }
+
+            // KICK BACK
+            if (other.CompareTag("Projectile"))
+            {
+                Rigidbody projectileRb = other.GetComponent<Rigidbody>();
+                if (projectileRb != null)
+                {
+                    Vector3 directionToOrigin = (transform.position - other.transform.position).normalized;
+                    projectileRb.linearVelocity = directionToOrigin * projectileRb.linearVelocity.magnitude;
+
+                    Debug.Log("Proiettile respinto");
+                }
             }
         }
     }
