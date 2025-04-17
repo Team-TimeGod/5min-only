@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -13,6 +13,9 @@ public class Enemy_Controller : MonoBehaviour
     public Transform PlayerTransform { get; private set; }
     [field: SerializeField] public Enemy_Chase ChaseState { get; private set; }
 
+    [field: SerializeField, Header("Animator")]
+    public Animator Animator { get; private set; } // 👈 Nuovo campo per l'animatore
+
     public NavMeshAgent Agent { get; private set; }
 
     private EnemyState _currentState;
@@ -21,17 +24,22 @@ public class Enemy_Controller : MonoBehaviour
     {
         Agent = GetComponent<NavMeshAgent>();
 
+        if (Animator == null)
+            Animator = GetComponentInChildren<Animator>(); // Prova ad assegnarlo automaticamente se non settato
+
         SetState(PatrolState);
     }
 
     private void Update()
     {
-        if (_currentState != null) _currentState.OnUpdate(this);
+        if (_currentState != null)
+            _currentState.OnUpdate(this);
     }
 
     private void OnTriggerEnter(Collider other)
     {
-        if (_currentState != null) _currentState.OnCollision(this, other);
+        if (_currentState != null)
+            _currentState.OnCollision(this, other);
     }
 
     public void SetState(EnemyState _state)
@@ -48,6 +56,7 @@ public class Enemy_Controller : MonoBehaviour
 
     private void OnDrawGizmos()
     {
-        if (_currentState != null) _currentState.DrawGizmo(this);
+        if (_currentState != null)
+            _currentState.DrawGizmo(this);
     }
 }

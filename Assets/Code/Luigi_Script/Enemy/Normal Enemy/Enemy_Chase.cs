@@ -4,9 +4,13 @@ using UnityEngine;
 public class Enemy_Chase : EnemyState
 {
     [SerializeField] private float chaseRadius = 20f;
+    [SerializeField] private float attackDistance = 2f;
+
+    private bool isAttacking = false;
 
     public override void OnEnter(Enemy_Controller _controller)
     {
+        isAttacking = false;
         _controller.Agent.SetDestination(_controller.PlayerTransform.position);
     }
 
@@ -14,16 +18,38 @@ public class Enemy_Chase : EnemyState
     {
         float distanceToPlayer = Vector3.Distance(_controller.transform.position, _controller.PlayerTransform.position);
 
-        _controller.Agent.SetDestination(_controller.PlayerTransform.position);
-
+        // Se è troppo lontano, torna in patrol
         if (distanceToPlayer > chaseRadius)
         {
+            isAttacking = false;
+            _controller.Animator.SetBool("isAttacking", false);
             _controller.SetState(_controller.PatrolState);
+            return;
+        }
+
+        // Se è abbastanza vicino, attacca
+        if (distanceToPlayer <= attackDistance)
+        {
+            if (!isAttacking)
+            {
+                isAttacking = true;
+                _controller.Agent.ResetPath(); // Ferma il movimento
+                _controller.Animator.SetBool("isAttacking", true);
+            }
+        }
+        else
+        {
+            // Insegue il giocatore
+            isAttacking = false;
+            _controller.Animator.SetBool("isAttacking", false);
+            _controller.Agent.SetDestination(_controller.PlayerTransform.position);
         }
     }
 
     public override void OnExit(Enemy_Controller _controller)
     {
+        isAttacking = false;
+        _controller.Animator.SetBool("isAttacking", false);
     }
 
     public override void OnCollision(Enemy_Controller _controller, Collider _collision)
@@ -35,6 +61,9 @@ public class Enemy_Chase : EnemyState
     {
         Gizmos.color = Color.blue;
         Gizmos.DrawWireSphere(_controller.transform.position, chaseRadius);
+
+        Gizmos.color = Color.red;
+        Gizmos.DrawWireSphere(_controller.transform.position, attackDistance);
 
         Gizmos.color = Color.cyan;
         Gizmos.DrawLine(_controller.transform.position, _controller.PlayerTransform.position);
