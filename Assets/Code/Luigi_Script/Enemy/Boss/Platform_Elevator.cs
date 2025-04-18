@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class Platform_Elevator : MonoBehaviour
 {
@@ -41,6 +42,7 @@ public class Platform_Elevator : MonoBehaviour
         {
             playerOnPlatform = true;
             StartElevator();
+            SceneManager.LoadScene("SCN_Win");
         }
     }
 

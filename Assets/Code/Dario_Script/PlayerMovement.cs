@@ -18,6 +18,7 @@ public class PlayerMovement : MonoBehaviour
     [Header("Reference")]
     [SerializeField] private Transform _mainCamera;
     [SerializeField] private InventoryMananger _IM;
+    [SerializeField] private Animator _AC;
 
     void Start()
     {
@@ -45,15 +46,21 @@ public class PlayerMovement : MonoBehaviour
         //moveDirection = new Vector3(horizontalMove, 0, verticalMove);
         
         controller.Move(moveDirection * speed * Time.unscaledDeltaTime);
-   
+
         if (moveDirection != Vector3.zero)
         {
             Quaternion toRotate = Quaternion.LookRotation(rotation, Vector3.up);
             transform.rotation = Quaternion.RotateTowards(transform.rotation, toRotate, rotationSpeed * Time.unscaledDeltaTime);
+            _AC.SetBool("move", true);
+        }
+        else
+        {
+            _AC.SetBool("move", false);
         }
 
         if (controller.isGrounded)
         {
+            _AC.SetBool("jump", false);
             //print("CharacterController is grounded");
             moveDirection = horizontalDirection + verticalDirection;
             jumpCount = 0;
@@ -80,6 +87,7 @@ public class PlayerMovement : MonoBehaviour
     private void Jump()
 
     {
+        _AC.SetBool("jump", true);
         if (_IM.getDoubleJump())
         {
             velocity.y = superJumpSpeed;

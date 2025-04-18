@@ -31,18 +31,18 @@ ModelImporter:
     extraUserProperties: []
     clipAnimations:
     - serializedVersion: 16
-      name: Armature|Armature.001|mixamo.com|Layer0.002 (1)
-      takeName: Armature|Armature.001|mixamo.com|Layer0.002
+      name: Idle_Toki
+      takeName: Armature|Armature|mixamo.com|Layer0
       internalID: -6842666708266138392
-      firstFrame: 0
-      lastFrame: 21
+      firstFrame: 1
+      lastFrame: 78
       wrapMode: 0
       orientationOffsetY: 0
       level: 0
       cycleOffset: 0
       loop: 0
       hasAdditiveReferencePose: 0
-      loopTime: 0
+      loopTime: 1
       loopBlend: 0
       loopBlendOrientation: 0
       loopBlendPositionY: 0
@@ -58,13 +58,13 @@ ModelImporter:
       transformMask: []
       maskType: 3
       maskSource: {instanceID: 0}
-      additiveReferencePoseFrame: 0
+      additiveReferencePoseFrame: 1
     - serializedVersion: 16
-      name: Armature|Armature.001|mixamo.com|Layer0.001
+      name: Jump
       takeName: Armature|Armature.001|mixamo.com|Layer0.001
       internalID: -5849203476035394275
-      firstFrame: 0
-      lastFrame: 18
+      firstFrame: 430
+      lastFrame: 448
       wrapMode: 0
       orientationOffsetY: 0
       level: 0
@@ -87,20 +87,20 @@ ModelImporter:
       transformMask: []
       maskType: 3
       maskSource: {instanceID: 0}
-      additiveReferencePoseFrame: 0
+      additiveReferencePoseFrame: 1
     - serializedVersion: 16
-      name: Armature|Armature.001|mixamo.com|Layer0.002
+      name: Fall
       takeName: Armature|Armature.001|mixamo.com|Layer0.002
       internalID: -3865379262170353974
-      firstFrame: 0
-      lastFrame: 21
+      firstFrame: 490
+      lastFrame: 511
       wrapMode: 0
       orientationOffsetY: 0
       level: 0
       cycleOffset: 0
       loop: 0
       hasAdditiveReferencePose: 0
-      loopTime: 0
+      loopTime: 1
       loopBlend: 0
       loopBlendOrientation: 0
       loopBlendPositionY: 0
@@ -116,13 +116,13 @@ ModelImporter:
       transformMask: []
       maskType: 3
       maskSource: {instanceID: 0}
-      additiveReferencePoseFrame: 0
+      additiveReferencePoseFrame: 1
     - serializedVersion: 16
-      name: Armature|Armature.001|mixamo.com|Layer0.003
+      name: Ground
       takeName: Armature|Armature.001|mixamo.com|Layer0.003
       internalID: 3618420698690315038
-      firstFrame: 0
-      lastFrame: 32
+      firstFrame: 560
+      lastFrame: 592
       wrapMode: 0
       orientationOffsetY: 0
       level: 0
@@ -145,13 +145,13 @@ ModelImporter:
       transformMask: []
       maskType: 3
       maskSource: {instanceID: 0}
-      additiveReferencePoseFrame: 0
+      additiveReferencePoseFrame: 1
     - serializedVersion: 16
-      name: Armature|Armature|mixamo.com|Layer0
+      name: Spin
       takeName: Armature|Armature|mixamo.com|Layer0
       internalID: -4791504522942941401
-      firstFrame: 0
-      lastFrame: 591
+      firstFrame: 350
+      lastFrame: 380
       wrapMode: 0
       orientationOffsetY: 0
       level: 0
@@ -174,7 +174,36 @@ ModelImporter:
       transformMask: []
       maskType: 3
       maskSource: {instanceID: 0}
-      additiveReferencePoseFrame: 0
+      additiveReferencePoseFrame: 1
+    - serializedVersion: 16
+      name: Run
+      takeName: Scene
+      internalID: -8206857311389296499
+      firstFrame: 640
+      lastFrame: 662
+      wrapMode: 0
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      hasAdditiveReferencePose: 0
+      loopTime: 1
+      loopBlend: 0
+      loopBlendOrientation: 0
+      loopBlendPositionY: 0
+      loopBlendPositionXZ: 0
+      keepOriginalOrientation: 0
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 0
+      heightFromFeet: 0
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      events: []
+      transformMask: []
+      maskType: 3
+      maskSource: {instanceID: 0}
+      additiveReferencePoseFrame: 1
     isReadable: 0
   meshes:
     lODScreenPercentages: []

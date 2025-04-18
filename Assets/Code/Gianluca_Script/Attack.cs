@@ -26,7 +26,6 @@ public class Attack : MonoBehaviour
 
     private void Awake()
     {
-        _AC = gameObject.GetComponentInParent<Animator>();
     }
 
     private void OnTriggerEnter(Collider other)
