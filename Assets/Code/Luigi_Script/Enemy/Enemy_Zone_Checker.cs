@@ -22,6 +22,7 @@ public class Enemy_Zone_Checker : MonoBehaviour
 
         foreach (Collider col in colliders)
         {
+            Debug.Log(col.name);
             HealthSystem enemyHealth = col.GetComponent<HealthSystem>();
             if (enemyHealth != null && enemyHealth.getLife() > 0)
             {
@@ -35,7 +36,9 @@ public class Enemy_Zone_Checker : MonoBehaviour
             hasTriggered = true;
             Debug.Log("Tutti i nemici nella zona sono stati sconfitti!");
             if (targetAnimator != null)
-                targetAnimator.SetTrigger(animationTriggerName);
+                //targetAnimator.SetTrigger(animationTriggerName);
+                //targetAnimator.Play("Open");
+                targetAnimator.Play(animationTriggerName);
         }
     }
 

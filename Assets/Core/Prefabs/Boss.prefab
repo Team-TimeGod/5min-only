@@ -55,7 +55,7 @@ MonoBehaviour:
   - {fileID: 0}
   waitTimeAtPoint: 2
   movespeed: 3
-  areaAttackPrefab: {fileID: 3046571715110404716, guid: 7ffbb69e03e452b44a593948ba88a5fe, type: 3}
+  areaAttackController: {fileID: 0}
   projectilePreFab: {fileID: 8824092246713865230, guid: 1413f76f5506eba4c86438cf6b3888e1, type: 3}
   firePoint: {fileID: 7605045297514827157}
   target: {fileID: 0}
